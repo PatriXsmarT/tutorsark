@@ -5,15 +5,15 @@ namespace App\Models;
 use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
-use App\Traits\Passport\HasPasswordGrant;
-use App\Traits\Socialite\HasSocialAccounts;
+use App\Traits\Auth\Passport\HasPasswordGrant;
+use App\Traits\Auth\Socialite\ModelSocialAccounts;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasRoles, HasPasswordGrant, HasSocialAccounts, HasFactory, Notifiable;
+    use HasApiTokens, HasRoles, HasPasswordGrant, ModelSocialAccounts, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.

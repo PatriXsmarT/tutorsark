@@ -2,22 +2,11 @@
 
 namespace App\Subscribers;
 
+use Laravel\Passport\Events\AccessTokenCreated;
+use Laravel\Passport\Events\RefreshTokenCreated;
+
 class PassportEventSubscriber
 {
-    /**
-     * Revokes old tokens.
-     */
-    public function revokeOldTokens($event) {
-
-    }
-
-    /**
-     * Prune old tokens.
-     */
-    public function pruneOldTokens($event) {
-
-    }
-
     /**
      * Register the listeners for the subscriber.
      *
@@ -28,12 +17,34 @@ class PassportEventSubscriber
     {
         return [
             'Laravel\Passport\Events\AccessTokenCreated' => [
-                'revokeOldTokens',
+                [PassportEventSubscriber::class,'handleRevokeOldTokens'],
             ],
 
             'Laravel\Passport\Events\RefreshTokenCreated' => [
-                'pruneOldTokens',
+                [PassportEventSubscriber::class,'handlePruneOldTokens'],
             ],
         ];
+    }
+
+    /**
+     * Handle the event.
+     *
+     * @param  AccessTokenCreated  $event
+     * @return void
+     */
+    public function handleRevokeOldTokens(AccessTokenCreated $event)
+    {
+        //
+    }
+
+    /**
+     * Handle the event.
+     *
+     * @param  RefreshTokenCreated  $event
+     * @return void
+     */
+    public function handlePruneOldTokens(RefreshTokenCreated $event)
+    {
+        //
     }
 }
