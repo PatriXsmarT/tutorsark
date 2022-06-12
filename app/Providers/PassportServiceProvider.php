@@ -2,12 +2,12 @@
 
 namespace App\Providers;
 
-use App\Models\Passport\Token;
+use App\Models\Auth\Passport\Token;
 use Laravel\Passport\Passport;
-use App\Models\Passport\Client;
-use App\Models\Passport\AuthCode;
+use App\Models\Auth\Passport\Client;
+use App\Models\Auth\Passport\AuthCode;
 use Illuminate\Support\ServiceProvider;
-use App\Models\Passport\PersonalAccessClient;
+use App\Models\Auth\Passport\PersonalAccessClient;
 
 class PassportServiceProvider extends ServiceProvider
 {

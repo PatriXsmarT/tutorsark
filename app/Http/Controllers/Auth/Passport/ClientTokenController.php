@@ -20,8 +20,8 @@ class ClientTokenController extends Controller
 
         return (new ClientToken)(
             $request,
-            '', // CLIENT_ID
-            '' // CLIENT_SECRET
+            $request->client_id, // CLIENT_ID
+            $request->client_secret, // CLIENT_SECRET
         );
     }
 }

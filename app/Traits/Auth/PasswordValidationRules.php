@@ -1,7 +1,7 @@
 <?php
 namespace App\Traits\Auth;
 
-use App\Rules\Password;
+use App\Rules\Auth\Password;
 
 trait PasswordValidationRules
 {

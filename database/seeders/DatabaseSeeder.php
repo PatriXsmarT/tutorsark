@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Passport\Client;
-use App\Models\Passport\PersonalAccessClient;
+use App\Models\Auth\Passport\Client;
+use App\Models\Auth\Passport\PersonalAccessClient;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Laravel\Passport\ClientRepository;

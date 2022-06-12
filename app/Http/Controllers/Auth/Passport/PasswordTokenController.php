@@ -20,8 +20,8 @@ class PasswordTokenController extends Controller
 
         return (new PasswordToken)(
             $request,
-            config('passport.password_grant_client.id'),
-            config('passport.password_grant_client.secret')
+            $request->client_id,
+            $request->client_secret
         );
     }
 }

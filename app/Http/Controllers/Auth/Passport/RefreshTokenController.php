@@ -20,8 +20,8 @@ class RefreshTokenController extends Controller
 
         return (new RefreshToken)(
             $request,
-            '', // CLIENT_ID
-            '' // CLIENT_SECRET
+            $request->client_id, // CLIENT_ID
+            $request->client_secret // CLIENT_SECRET
         );
     }
 }

@@ -20,8 +20,8 @@ class RedirectController extends Controller
 
         return (new RedirectClient)(
             $request,
-            '', // CLIENT_ID
-            '' // CLIENT_SECRET
+            $request->client_id, // CLIENT_ID
+            $request->client_redirect_uri // CLIENT_Redirect_URI
         );
     }
 }
