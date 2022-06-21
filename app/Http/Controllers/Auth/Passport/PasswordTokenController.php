@@ -16,8 +16,6 @@ class PasswordTokenController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $this->middleware('guest');
-
         return (new PasswordToken)(
             $request,
             $request->client_id,

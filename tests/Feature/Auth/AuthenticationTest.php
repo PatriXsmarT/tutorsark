@@ -47,7 +47,7 @@ class AuthenticationTest extends TestCase
      *
      * @return void
      */
-    public function test_apps_can_get_access_token_using_a_user_email_and_password()
+    public function test_apps_can_get_access_token_using_users_email_and_password()
     {
         $user = User::factory()->create();
 
@@ -96,7 +96,7 @@ class AuthenticationTest extends TestCase
      *
      * @return void
      */
-    public function test_user_can_logout_using_web_sessions()
+    public function test_users_can_logout_using_web_sessions()
     {
         $user = User::factory()->create();
 
@@ -120,7 +120,7 @@ class AuthenticationTest extends TestCase
      *
      * @return void
      */
-    public function test_user_can_logout_by_revoking_access_token()
+    public function test_users_can_logout_by_revoking_access_token()
     {
         $this->noHandling();
 

@@ -16,12 +16,9 @@ class ClientTokenController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $this->middleware('guest');
-
         return (new ClientToken)(
-            $request,
-            $request->client_id, // CLIENT_ID
-            $request->client_secret, // CLIENT_SECRET
+            $request->input('client_id'), // CLIENT_ID
+            $request->input('client_secret'), // CLIENT_SECRET
         );
     }
 }

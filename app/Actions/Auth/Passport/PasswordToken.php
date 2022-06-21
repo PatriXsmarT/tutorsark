@@ -37,8 +37,6 @@ class PasswordToken
             'password' =>  $request->password,
             'scope' => $scope
         ])->throw()->json();
-
-        dump(Client::count().' is the number');
     }
 
     /**

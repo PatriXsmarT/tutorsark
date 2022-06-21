@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Auth\Passport;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Actions\Auth\Passport\RefreshToken;
+use App\Actions\Auth\Passport\RedirectClient;
 
-class RefreshTokenController extends Controller
+class ImplicitTokenController extends Controller
 {
     /**
      * Handle the incoming request.
@@ -16,11 +16,12 @@ class RefreshTokenController extends Controller
      */
     public function __invoke(Request $request)
     {
-        return (new RefreshToken)(
+        return (new RedirectClient)(
             $request,
             $request->client_id, // CLIENT_ID
-            $request->client_secret, // CLIENT_SECRET
-            // $request->scopes // Access Scope
+            $request->client_redirect_uri, // CLIENT_Redirect_URI
+            '', // ACCESS SCOPES
+            'token' // CLIENT_SECRET
         );
     }
 }

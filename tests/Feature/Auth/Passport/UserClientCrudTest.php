@@ -16,7 +16,7 @@ class UserClientCrudTest extends TestCase
      *
      * @return void
      */
-    public function test_user_can_see_list_of_oauth_clients_created()
+    public function test_users_can_see_list_of_oauth_clients_created()
     {
         $user = User::factory()->create();
 
@@ -30,7 +30,7 @@ class UserClientCrudTest extends TestCase
      *
      * @return void
      */
-    public function test_user_can_create_new_oauth_clients()
+    public function test_users_can_create_new_oauth_clients()
     {
         $user = User::factory()->create();
 
@@ -53,7 +53,7 @@ class UserClientCrudTest extends TestCase
      *
      * @return void
      */
-    public function test_user_can_update_their_oauth_client_details()
+    public function test_users_can_update_their_oauth_client_details()
     {
         $user = User::factory()->create();
 
@@ -86,7 +86,7 @@ class UserClientCrudTest extends TestCase
      *
      * @return void
      */
-    public function test_user_can_delete_their_oauth_clients_details()
+    public function test_users_can_delete_their_oauth_clients_details()
     {
         $user = User::factory()->create();
 

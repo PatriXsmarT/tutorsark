@@ -4,20 +4,20 @@ namespace Tests\Feature\Auth\Passport;
 
 use Tests\TestCase;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Laravel\Passport\Client;
 use Laravel\Passport\ClientRepository;
-use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 
-class RevokeAccessTokenTest extends TestCase
+class RefreshAccessTokenTest extends TestCase
 {
-    use DatabaseMigrations, WithFaker;
+    use DatabaseMigrations;
 
     /**
      * A basic feature test example.
      *
      * @return void
      */
-    public function test_access_tokens_issued_to_oauth_authourization_code_grant_client_can_be_revoked()
+    public function test_oauth_authourization_code_grant_client_can_be_issued_access_tokens_using_users_refresh_token()
     {
         $user = User::factory()->create();
 
@@ -42,8 +42,7 @@ class RevokeAccessTokenTest extends TestCase
         ->assertViewIs('passport::authorize')
         ->assertViewHasAll(['authToken','request','client'])
         ->assertSuccessful();
-
-        $response = $this->withHeaders([
+        $token_response = $this->withHeaders([
             'client_id' => $oauth_client->id,
             'client_redirect_uri' => $oauth_client->redirect,
             'client_secret' => $oauth_client->secret
@@ -59,10 +58,7 @@ class RevokeAccessTokenTest extends TestCase
         ->assertJsonCount(4)
         ->assertSuccessful();
 
-        $this->postJson('api/oauth/revoke-token',[],[
-            'Accept' => 'application/json',
-            'Authorization' => 'Bearer '.$response['access_token'],
-        ])->assertSuccessful();
+        $this->getAccessTokenFromRefreshToken($oauth_client, $token_response);
     }
 
     /**
@@ -70,7 +66,7 @@ class RevokeAccessTokenTest extends TestCase
      *
      * @return void
      */
-    public function test_access_tokens_issued_to_oauth_authourization_code_grant_client_with_pkce_can_be_revoked()
+    public function test_oauth_authourization_code_grant_client_with_pkce_can_be_issued_access_tokens_using_users_refresh_token()
     {
         $user = User::factory()->create();
 
@@ -99,7 +95,7 @@ class RevokeAccessTokenTest extends TestCase
         ->assertViewHasAll(['authToken','request','client'])
         ->assertSuccessful();
 
-        $response = $this->withHeaders([
+        $token_response = $this->withHeaders([
             'client_id' => $oauth_client->id,
             'client_redirect_uri' => $oauth_client->redirect
         ])
@@ -114,10 +110,7 @@ class RevokeAccessTokenTest extends TestCase
         ->assertJsonCount(4)
         ->assertSuccessful();
 
-        $this->postJson('api/oauth/revoke-token',[],[
-            'Accept' => 'application/json',
-            'Authorization' => 'Bearer '.$response['access_token'],
-        ])->assertSuccessful();
+        $this->getAccessTokenFromRefreshToken($oauth_client, $token_response);
     }
 
     /**
@@ -125,7 +118,7 @@ class RevokeAccessTokenTest extends TestCase
      *
      * @return void
      */
-    public function test_access_tokens_issued_to_oauth_password_grant_client_can_be_revoked()
+    public function test_oauth_password_grant_client_can_be_issued_access_token_using_users_refresh_token()
     {
         $clientRepository = New ClientRepository;
 
@@ -140,7 +133,7 @@ class RevokeAccessTokenTest extends TestCase
 
         $user = User::factory()->create();
 
-        $response = $this->postJson('oauth/token', [
+        $token_response = $this->postJson('oauth/token', [
             'grant_type' => 'password',
             'username' => $user->email,
             'password' => $this->correctPassword(),
@@ -152,74 +145,36 @@ class RevokeAccessTokenTest extends TestCase
         ->assertJsonCount(4)
         ->assertSuccessful();
 
-        $this->postJson('api/oauth/revoke-token',[],[
-            'Accept' => 'application/json',
-            'Authorization' => 'Bearer '.$response['access_token'],
-        ])->assertSuccessful();
+        $this->getAccessTokenFromRefreshToken($oauth_client, $token_response);
     }
 
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function test_access_tokens_issued_to_oauth_client_credentials_grant_can_be_revoked()
+    protected function getAccessTokenFromRefreshToken(Client $oauth_client, $token_response)
     {
-        $clientRepository = New ClientRepository;
+        // $response = $this->postJson('oauth/token',[
+        //     'grant_type' => 'refresh_token',
+        //     'client_id' => $oauth_client->id,
+        //     'client_secret' => $oauth_client->secret,
+        //     'refresh_token' => $token_response['refresh_token'],
+        //     'scope' => '*'
+        // ]);
 
-        $oauth_client = $clientRepository->create(
-            null,
-            'New OAuth Client',
-            ''
-        );
+        // $response = $this->postJson('api/oauth/refresh-token',[
+        //     'client_id' => $oauth_client->id,
+        //     'client_secret' => $oauth_client->secret,
+        //     'refresh_token' => $token_response['refresh_token'],
+        //     'scope' => '*'
+        // ]);
 
-        $response = $this->postJson('oauth/token',[
-            'grant_type' => 'client_credentials',
+        $response = $this->postJson('oauth/refresh-token',[
             'client_id' => $oauth_client->id,
             'client_secret' => $oauth_client->secret,
+            'refresh_token' => $token_response['refresh_token'],
             'scope' => '*'
-        ])
-        ->assertJsonStructure(['token_type','expires_in','access_token'])
-        ->assertJsonCount(3)
+        ]);
+
+        $response
+        ->assertJsonStructure(['token_type','expires_in','access_token','refresh_token'])
+        ->assertJsonCount(4)
         ->assertSuccessful();
-
-        $this->postJson('api/oauth/revoke-token',[],[
-            'Accept' => 'application/json',
-            'Authorization' => 'Bearer '.$response['access_token'],
-        ])->assertSuccessful();
-    }
-
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function test_access_tokens_issued_to_oauth_personal_access_grant_can_be_revoked()
-    {
-        $clientRepository = New ClientRepository;
-
-        $clientRepository->createPersonalAccessClient(
-            null,
-            config('app.name').' Personal Grant Client',
-            'http://localhost'
-        );
-
-        $user = User::factory()->create();
-
-        $this->actingAs($user);
-
-        $data = [
-            'name' => 'Personal Access Token',
-            'scope' => '*'
-        ];
-
-        $response = $this->post('/oauth/personal-access-tokens', $data)
-        ->assertSee('accessToken')
-        ->assertSuccessful();
-
-        $this->postJson('api/oauth/revoke-token',[],[
-            'Accept' => 'application/json',
-            'Authorization' => 'Bearer '.$response['accessToken'],
-        ])->assertSuccessful();
     }
 }

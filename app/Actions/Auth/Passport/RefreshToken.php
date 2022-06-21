@@ -17,7 +17,7 @@ class RefreshToken
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke(Request $request, $clientId, $clientSecret, $scope = '*')
+    public function __invoke(Request $request, $clientId, $clientSecret, $scope = null)
     {
         return Http::asForm()->post(config('passport.token_endpoint'),
         [

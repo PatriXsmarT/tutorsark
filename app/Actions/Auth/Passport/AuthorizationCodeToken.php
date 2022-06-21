@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use InvalidArgumentException;
 use Illuminate\Support\Facades\Http;
 
-class ClientCallback
+class AuthorizationCodeToken
 {
     /**
      * Handle the incoming request.
@@ -18,7 +18,7 @@ class ClientCallback
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke(Request $request, $clientId = null, $clientSecret = null, $clientRedirectUri = null)
+    public function __invoke(Request $request, $clientId = null, $clientRedirectUri = null, $clientSecret = null)
     {
         $state = $request->session()->pull('state');
 
@@ -29,13 +29,15 @@ class ClientCallback
             InvalidArgumentException::class
         );
 
-        return Http::asForm()->post(config('passport.token_endpoint'), [
-            'grant_type' => 'authorization_code',
+        $postData = [
+            'grant_type' => 'authorization_code',// 'grant_type' => 'authorization_code',
             'client_id' => $clientId,
-            'client_secret' => $clientSecret,
             'redirect_uri' => $clientRedirectUri,
-            'code' => $request->code,
             'code_verifier' => $codeVerifier,
-        ])->throw()->json();
+            'code' => $request->code,
+            'client_secret' => $clientSecret,
+        ];
+
+        return Http::asForm()->post(config('passport.token_endpoint'), $postData)->throw()->json();
     }
 }

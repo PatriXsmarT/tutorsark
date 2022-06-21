@@ -17,7 +17,7 @@ class UserPersonalAccessTokenCrudTest extends TestCase
      *
      * @return void
      */
-    public function test_user_can_see_list_of_oauth_personal_access_tokens_created_using_the_web()
+    public function test_users_can_see_oauth_personal_access_tokens_created_using_the_web()
     {
         $user = User::factory()->create();
 
@@ -31,7 +31,7 @@ class UserPersonalAccessTokenCrudTest extends TestCase
      *
      * @return void
      */
-    public function test_user_can_create_oauth_personal_access_tokens_using_the_web()
+    public function test_users_can_create_oauth_personal_access_tokens_using_the_web()
     {
         $user = User::factory()->create();
 
@@ -42,8 +42,8 @@ class UserPersonalAccessTokenCrudTest extends TestCase
             'scope' => '*'
         ];
 
-        $this->post('/oauth/personal-access-tokens', $data)
-        ->assertSee('accessToken')
+        $this->postJson('/oauth/personal-access-tokens', $data)
+        ->assertJsonStructure(['accessToken','token'])
         ->assertSuccessful();
 
         $this->assertDatabaseHas('oauth_access_tokens', ['name' => config('app.name').'Personal Access Token',]);
@@ -54,7 +54,7 @@ class UserPersonalAccessTokenCrudTest extends TestCase
      *
      * @return void
      */
-    public function test_user_can_update_oauth_personal_access_tokens_using_the_web()
+    public function test_users_can_update_oauth_personal_access_tokens_using_the_web()
     {
         $user = User::factory()->create();
 
@@ -65,8 +65,8 @@ class UserPersonalAccessTokenCrudTest extends TestCase
             'scope' => '*'
         ];
 
-        $createResponse = $this->post('/oauth/personal-access-tokens', $createData)
-        ->assertSee('accessToken')
+        $createResponse = $this->postJson('/oauth/personal-access-tokens', $createData)
+        ->assertJsonStructure(['accessToken','token'])
         ->assertSuccessful();
 
         $this->assertDatabaseHas('oauth_access_tokens', ['name' => config('app.name').'Personal Access Token',]);
@@ -77,7 +77,7 @@ class UserPersonalAccessTokenCrudTest extends TestCase
         ];
 
         $updateResponse = $this->post('/oauth/personal-access-tokens/'.$createResponse->json('id'), $updateData)
-        ->assertSee('accessToken')
+        ->assertJsonStructure(['accessToken','token'])
         ->assertSuccessful();
 
         $this->assertDatabaseHas('oauth_access_tokens', ['name' => 'New '.config('app.name').'Personal Access Token',]);
@@ -90,10 +90,8 @@ class UserPersonalAccessTokenCrudTest extends TestCase
      *
      * @return void
      */
-    public function test_user_can_delete_oauth_personal_access_tokens_using_the_web()
+    public function test_users_can_delete_oauth_personal_access_tokens_using_the_web()
     {
-        $this->noHandling();
-
         $user = User::factory()->create();
 
         $this->actingAs($user);
@@ -103,18 +101,18 @@ class UserPersonalAccessTokenCrudTest extends TestCase
             'scope' => '*'
         ];
 
-        $createResponse = $this->post('/oauth/personal-access-tokens', $createData)
-        ->assertSee('accessToken')
+        $createResponse = $this->postJson('/oauth/personal-access-tokens', $createData)
+        ->assertJsonStructure(['accessToken','token'])
         ->assertSuccessful();
 
         $this->assertDatabaseHas('oauth_access_tokens', ['name' => config('app.name').'Personal Access Token',]);
 
-        // $this->delete('oauth/personal-access-tokens/'.$createResponse->json('id'))
-        // ->assertSuccessful();
+        $this->deleteJson('oauth/personal-access-tokens/'.$createResponse['token']['id'])
+        ->assertSuccessful();
 
-        // $this->assertDatabaseHas('oauth_access_tokens', [
-        //     'name' => config('app.name').'Personal Access Token',
-        //     'revoked' => true
-        // ]);
+        $this->assertDatabaseHas('oauth_access_tokens', [
+            'name' => config('app.name').'Personal Access Token',
+            'revoked' => true
+        ]);
     }
 }

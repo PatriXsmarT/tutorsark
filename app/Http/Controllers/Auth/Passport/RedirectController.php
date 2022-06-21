@@ -16,8 +16,6 @@ class RedirectController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $this->middleware('guest');
-
         return (new RedirectClient)(
             $request,
             $request->client_id, // CLIENT_ID

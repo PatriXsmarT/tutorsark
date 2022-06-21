@@ -48,7 +48,7 @@ class PassportServiceProvider extends ServiceProvider
 
         Passport::usePersonalAccessClientModel(PersonalAccessClient::class);
 
-        // Passport::enableImplicitGrant(); // Not recommended
+        Passport::enableImplicitGrant(); // Not recommended
 
         Passport::tokensCan(config('passport.tokens_can'));
 
