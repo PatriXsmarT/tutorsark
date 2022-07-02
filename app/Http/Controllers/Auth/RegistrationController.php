@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\JsonResponse;
 use App\Traits\Auth\RedirectsUsers;
 use App\Http\Controllers\Controller;
@@ -55,12 +56,6 @@ class RegistrationController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-
-            // 'username' => Str::slug($request->name,'-').'-'.Str::random(5),
-            // 'profession' => $request->profession,
-            // 'state' =>$request->state,
-            // 'town' => $request->town,
-            // 'phone_number' => $request->phone_number
         ]));
 
         event(new Registered($user));

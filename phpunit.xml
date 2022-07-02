@@ -14,6 +14,9 @@
         <testsuite name="Feature-Auth">
             <directory suffix="Test.php">./tests/Feature/Auth</directory>
         </testsuite>
+        <testsuite name="Feature-User">
+            <directory suffix="Test.php">./tests/Feature/User</directory>
+        </testsuite>
     </testsuites>
     <coverage processUncoveredFiles="true">
         <include>

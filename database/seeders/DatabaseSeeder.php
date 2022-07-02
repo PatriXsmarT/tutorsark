@@ -2,11 +2,13 @@
 
 namespace Database\Seeders;
 
-use App\Models\Auth\Passport\Client;
-use App\Models\Auth\Passport\PersonalAccessClient;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Seeders\RoleSeeder;
+use Database\Seeders\AbilitySeeder;
+use App\Models\Auth\Passport\Client;
 use Laravel\Passport\ClientRepository;
+use App\Models\Auth\Passport\PersonalAccessClient;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,7 +19,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(ClientRepository $clients)
     {
+        $this->call(AbilitySeeder::class);
 
+        $this->call(RoleSeeder::class);
 
         Client::factory()->create([
             'id' => '96539625-e018-4915-b52c-88ec34378fae',

@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Permission;
+use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class PermissionPolicy
+class ProfilePolicy
 {
     use HandlesAuthorization;
 
@@ -18,19 +18,19 @@ class PermissionPolicy
      */
     public function viewAny(User $user)
     {
-        //
+        return $user;
     }
 
     /**
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Permission  $permission
+     * @param  \App\Models\Profile  $profile
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Permission $permission)
+    public function view(User $user, Profile $profile)
     {
-        //
+        return $user->id == $profile->user_id;
     }
 
     /**
@@ -41,54 +41,54 @@ class PermissionPolicy
      */
     public function create(User $user)
     {
-        //
+        return $user->profile === null;
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Permission  $permission
+     * @param  \App\Models\Profile  $profile
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Permission $permission)
+    public function update(User $user, Profile $profile)
     {
-        //
+        return $user->id === $profile->user_id;
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Permission  $permission
+     * @param  \App\Models\Profile  $profile
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Permission $permission)
+    public function delete(User $user, Profile $profile)
     {
-        //
+        return $user->can('delete_profile');
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Permission  $permission
+     * @param  \App\Models\Profile  $profile
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Permission $permission)
+    public function restore(User $user, Profile $profile)
     {
-        //
+        return $user->hasRole(['admin','user']);
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Permission  $permission
+     * @param  \App\Models\Profile  $profile
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Permission $permission)
+    public function forceDelete(User $user, Profile $profile)
     {
-        //
+        return $user->hasRole('admin');
     }
 }

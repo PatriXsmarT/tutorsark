@@ -17,8 +17,8 @@ class RoleFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->word(),
-            'guard_name' => 'web'
+            'name' => array_rand(config('app.roles')),
+            'description' => $this->faker->sentence()
         ];
     }
 }

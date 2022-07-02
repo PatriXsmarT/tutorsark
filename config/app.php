@@ -175,10 +175,21 @@ return [
          */
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
+        App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\TelescopeServiceProvider::class,
+
+
+        /*
+         * Custom Service Providers...
+         */
+        // App\Providers\CollectionServiceProvider::class,
+        // App\Providers\MiddlewareServiceProvider::class,
+        App\Providers\ObserverServiceProvider::class,
+        // App\Providers\RepositoryServiceProvider::class,
+        // App\Providers\QueueServiceProvider::class,
+        // App\Providers\ViewServiceProvider::class,
 
     ],
 
@@ -197,4 +208,42 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | Application Roles
+    |--------------------------------------------------------------------------
+    |
+    | The service providers listed here will be automatically loaded on the
+    | request to your application. Feel free to add your own services to
+    | this array to grant expanded functionality to your applications.
+    |
+    */
+    'roles' => [
+        'user',
+        'admin',
+        'manager',
+        'ceo',
+        'super-admin',
+        'engineer',
+        'marketer',
+        'team-leader'
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Application Abilities
+    |--------------------------------------------------------------------------
+    |
+    | The service providers listed here will be automatically loaded on the
+    | request to your application. Feel free to add your own services to
+    | this array to grant expanded functionality to your applications.
+    |
+    */
+    'abilities' => [
+        'view_profile',
+        'update_profile',
+        'delete_profile',
+        'create_profile'
+    ]
 ];

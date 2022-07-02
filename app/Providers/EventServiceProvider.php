@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
+use App\Subscribers\AuthEventSubscriber;
+use App\Subscribers\ProfileEventSubscriber;
 use App\Subscribers\PassportEventSubscriber;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -27,7 +29,9 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $subscribe = [
+        AuthEventSubscriber::class,
         PassportEventSubscriber::class,
+        ProfileEventSubscriber::class
     ];
 
     /**

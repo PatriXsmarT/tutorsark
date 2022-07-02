@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth\Socialite;
 
-use App\Models\Socialite\SocialAccount;
-use App\Http\Requests\StoreSocialAccountRequest;
-use App\Http\Requests\UpdateSocialAccountRequest;
+use App\Http\Controllers\Controller;
+use App\Models\Auth\Socialite\SocialAccount;
+use App\Http\Requests\Auth\Socialite\StoreSocialAccountRequest;
+use App\Http\Requests\Auth\Socialite\UpdateSocialAccountRequest;
 
 class SocialAccountController extends Controller
 {
@@ -31,7 +32,7 @@ class SocialAccountController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreSocialAccountRequest  $request
+     * @param  \App\Http\Requests\Auth\Socialite\StoreSocialAccountRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreSocialAccountRequest $request)
@@ -64,7 +65,7 @@ class SocialAccountController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateSocialAccountRequest  $request
+     * @param  \App\Http\Requests\Auth\Socialite\UpdateSocialAccountRequest  $request
      * @param  \App\Models\Socialite\SocialAccount  $socialAccount
      * @return \Illuminate\Http\Response
      */

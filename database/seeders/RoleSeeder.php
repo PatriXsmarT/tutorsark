@@ -3,36 +3,18 @@
 namespace Database\Seeders;
 
 use App\Models\Role;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class RoleSeeder extends Seeder
 {
     /**
-     * Authentication Guard
+     *
      */
-    protected $guards = ['web'];
+    public function rolesNeeded(){
 
-    /**
-     * Model Roles
-     */
-    protected $roles = [
-        'Admin',
-        'CEO',
-        'CTO',
-        'CMO',
-        'CSO',
-        'HRM',
-        'Accountant',
-        'Guardian',
-        'Manager',
-        'Marketer',
-        'School-Owner',
-        'Software-Developer',
-        'Student',
-        'Super-Admin',
-        'Tutor',
-    ];
+        return config('app.roles');
+    }
 
     /**
      * Run the database seeds.
@@ -41,29 +23,11 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        foreach ($this->guards() as $guard) {
-            foreach ($this->roles() as $role) {
-                Role::factory()->create([
-                    'name' => $role,
-                    'guard_name' => $guard
-                ]);
-            }
+        foreach ($this->rolesNeeded() as $role) {
+            // Create the role needed.
+            Role::factory()->create([
+                'name' => $role
+            ]);
         }
-    }
-
-    /**
-     * Model Roles
-     */
-    protected function roles ()
-    {
-        return $this->roles;
-    }
-
-    /**
-     * Authentication Guard
-     */
-    protected function guards ()
-    {
-        return $this->guards;
     }
 }

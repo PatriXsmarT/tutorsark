@@ -2,29 +2,48 @@
 
 namespace App\Models;
 
+use App\Traits\HasRoles;
+use App\Traits\HasAvatars;
+use App\Traits\UserRelations;
 use Laravel\Passport\HasApiTokens;
-use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\Auth\Passport\HasPasswordGrant;
-use App\Traits\Auth\Socialite\ModelSocialAccounts;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Traits\Auth\Socialite\ModelSocialAccounts;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasRoles, HasPasswordGrant, ModelSocialAccounts, HasFactory, Notifiable;
+    use
+    HasApiTokens,
+    HasRoles,
+    HasAvatars,
+    HasPasswordGrant,
+    ModelSocialAccounts,
+    HasFactory,
+    UserRelations,
+    Notifiable,
+    SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    // protected $fillable = [
+    //     'name',
+    //     'email',
+    //     'password',
+    // ];
+
+    /**
+     * The attributes that are not mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for serialization.
